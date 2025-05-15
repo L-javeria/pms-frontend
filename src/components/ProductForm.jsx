@@ -14,7 +14,9 @@ const getSchema = (isEdit = false) =>
         brand: yup.string().required("Brand is required"),
         price: yup.number().typeError("Price must be a number").required("Price is required"),
         discount: yup.number().typeError("Discount must be a number").optional(),
-        currency: yup.string().required("Currency is required"),
+        currency: yup.string()
+        .required("Currency is required")
+        .oneOf(["PKR", "USD", "EUR"], "Only PKR, USD, or EUR are allowed"),
         stockQuantity: yup.number().typeError("Stock must be a number").required("Stock quantity is required"),
         availabilityStatus: yup.string().oneOf(["In Stock", "Out of Stock"]).required(),
         productImage: yup
