@@ -1,12 +1,14 @@
 import React from 'react';
 import { useGetProductsQuery } from '../features/productApi';
 import { useNavigate } from 'react-router-dom';
+import Loading from './Loader/Loading';
 
 function ProductList() {
     const { data: products, isLoading } = useGetProductsQuery();
     const navigate = useNavigate();
+    const apiUrl = import.meta.env.VITE_API_URL;
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return <div className='flex justify-center items-center w-full min-h-screen'>  <Loading /></div>;
 
     const getCurrencySymbol = (currency) => {
         switch (currency) {
@@ -24,7 +26,7 @@ function ProductList() {
 
     return (
         <div className="p-10">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Products</h2>
+            {/* <h2 className="text-2xl font-bold mb-6 text-gray-800 ">Products List</h2> */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...products.data]
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -36,7 +38,7 @@ function ProductList() {
                         >
                             <div className="flex items-center gap-4 mb-4">
                                 <img
-                                    src={`http://localhost:3000/${product.productImage}`}
+                                    src={`${apiUrl}/${product.productImage}`}
                                     alt={product.productName}
                                     className="w-16 h-16 object-cover rounded border border-gray-200"
                                 />

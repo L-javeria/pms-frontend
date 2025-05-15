@@ -6,7 +6,7 @@ const Home = () => {
   
     return (
       <>
-        <div>
+        <div className='pt-[60px]'>
           <ProductList />
   
         </div>

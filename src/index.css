@@ -1,67 +1,17 @@
 @import "tailwindcss";
 
-.plus-product {
-    position: relative;
-    background-color: transparent;
-    color: #e8e8e8;
-    font-size: 17px;
-    font-weight: 600;
-    border-radius: 10px;
-    width: 150px;
-    height: 60px;
-    border: none;
-    text-transform: uppercase;
-    cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(51, 51, 51, 0.2);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+
+@layer components {
+  .form-input {
+    @apply bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full 
+           focus:border-indigo-600 focus:border-b-2 focus:outline-none;
   }
-  
-  .plus-product::before {
-    content: "";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background: linear-gradient(135deg,#7b4397,#dc2430 );
-    transform: translate(0%,90%);
-    z-index: 99;
-    position: relative;
-    transform-origin: bottom;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+
+  .form-label {
+    @apply pr-3 text-sm md:text-base font-medium;
   }
-  
-  .plus-product::after {
-    content: "";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #333;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    transform-origin: top;
-    transform: translate(0%,-100%);
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+
+  .error-text {
+    @apply text-red-500 text-sm;
   }
-  
-  .plus-product:hover::before {
-    transform: translate(0%,0%);
-  }
-  
-  .plus-product:hover::after {
-    transform: translate(0%,-200%);
-  }
-  
-  .plus-product:focus {
-    outline: none;
-  }
-  
-  .plus-product:active {
-    scale: 0.95;
-  }
-  
-  
-  
+}

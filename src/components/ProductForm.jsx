@@ -35,6 +35,7 @@ function ProductForm() {
     const [updateProduct] = useUpdateProductMutation();
     const dispatch = useDispatch()
     const productToEdit = useSelector(state => state.modal.productToEdit);
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     const {
         register,
@@ -48,7 +49,6 @@ function ProductForm() {
 
     // Prefill form when editing
     useEffect(() => {
-        console.log('product to edit', productToEdit)
         if (productToEdit) {
             Object.entries(productToEdit).forEach(([key, value]) => {
                 if (key !== '_id' && key !== '__v') {
@@ -58,8 +58,8 @@ function ProductForm() {
         }
     }, [productToEdit, setValue]);
 
+    
     const onSubmit = async (data) => {
-
         try {
             const formData = new FormData();
 
@@ -81,11 +81,9 @@ function ProductForm() {
             }
 
             if (productToEdit) {
-                console.log('form data in edit', formData)
                 await updateProduct({ id: productToEdit._id, formData }).unwrap();
                 alert("Product updated");
             } else {
-                console.log('form data in add', formData)
                 await addProduct(formData).unwrap();
                 alert("Product added");
             }
@@ -98,143 +96,142 @@ function ProductForm() {
 
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-lg mx-auto">
-
-            {/* Product Name */}
-            <label className="pr-3 mb-6 ">
-                Product Name <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("productName")}
-                placeholder=".i.e. Samsung Galaxy"
-                autoComplete='off'
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.productName ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.productName?.message}</p>
-
-            {/* Description */}
-            <label className="pr-3">
-                Description <span className="text-red-500">*</span>
-            </label>
-            <textarea
-                {...register("description")}
-                placeholder=".i.e. A high-performance smartphone"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.description ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.description?.message}</p>
-
-            {/* Category */}
-            <label className="pr-3">
-                Category <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("category")}
-                placeholder=".i.e. Electronics"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.category ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.category?.message}</p>
-
-            {/* Brand */}
-            <label className="pr-3">
-                Brand <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("brand")}
-                placeholder=".i.e. Samsung"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.brand ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.brand?.message}</p>
-
-            {/* Price */}
-            <label className="pr-3">
-                Price <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("price")}
-                placeholder=".i.e. 100"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.price ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.price?.message}</p>
-
-            {/* Discount (Optional) */}
-            <label className="pr-3">
-                Discount (%)
-            </label>
-            <input
-                {...register("discount")}
-                placeholder=".i.e. 10"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.discount ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.discount?.message}</p>
-
-            {/* Currency */}
-            <label className="pr-3">
-                Currency <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("currency")}
-                placeholder=".i.e. USD"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.currency ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.currency?.message}</p>
-
-            {/* Stock Quantity */}
-            <label className="pr-3">
-                Stock Quantity <span className="text-red-500">*</span>
-            </label>
-            <input
-                {...register("stockQuantity")}
-                placeholder=".i.e. 50"
-                className={`bg-[#f3f3f34a] placeholder-[#dad7d7] text-gray-500 pb-0 p-2 mb-1 w-full focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.stockQuantity ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.stockQuantity?.message}</p>
-
-            {/* Availability */}
-            <label className="pr-3">
-                Availability <span className="text-red-500">*</span>
-            </label>
-            <select
-                {...register("availabilityStatus")}
-                className={`bg-[#f3f3f34a] pb-0 p-2 mb-1 w-full placeholder-[#dad7d7] text-gray-500 focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.availabilityStatus ? 'border border-red-500' : ''}`}
-            >
-                {/* <option value="">Select status</option> */}
-                <option className='text-black' value="In Stock">In Stock</option>
-                <option className='text-black' value="Out of Stock">Out of Stock</option>
-            </select>
-            <p className="text-red-500 text-sm">{errors.availabilityStatus?.message}</p>
-
-            {productToEdit?.productImage && (
-                <div className="mb-2">
-                    <label className="text-sm text-gray-500">Current Image</label>
-                    <img
-                        src={`http://localhost:3000/${productToEdit.productImage}`}
-                        alt="Current product"
-                        className="w-32 h-32 object-cover border rounded mt-1"
-                    />
-                </div>
-            )}
-            <label className="pr-3">
-                Product Image {!productToEdit && <span className="text-red-500">*</span>}
-            </label>
-            <input
-                type="file"
-                accept="image/*"
-                {...register("productImage")}
-                className={`bg-[#f3f3f34a] pb-0 p-2 mb-1 w-full placeholder-[#dad7d7] text-gray-500 focus:border-indigo-600 focus:border-b-2 focus:outline-none ${errors.productImage ? 'border border-red-500' : ''}`}
-            />
-            <p className="text-red-500 text-sm">{errors.productImage?.message}</p>
-
-
-            {/* Submit Button */}
-            <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-                {productToEdit ? 'Update Product' : 'Add Product'}
-            </button>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-2xl px-4 sm:px-6 md:px-8 lg:px-0 mx-auto">
+      
+          {/* Product Name */}
+          <label className="form-label">
+            Product Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("productName")}
+            placeholder=".i.e. Samsung Galaxy"
+            autoComplete="off"
+            className={`form-input ${errors.productName ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.productName?.message}</p>
+      
+          {/* Description */}
+          <label className="form-label">
+            Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            {...register("description")}
+            placeholder=".i.e. A high-performance smartphone"
+            className={`form-input ${errors.description ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.description?.message}</p>
+      
+          {/* Category */}
+          <label className="form-label">
+            Category <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("category")}
+            placeholder=".i.e. Electronics"
+            className={`form-input ${errors.category ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.category?.message}</p>
+      
+          {/* Brand */}
+          <label className="form-label">
+            Brand <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("brand")}
+            placeholder=".i.e. Samsung"
+            className={`form-input ${errors.brand ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.brand?.message}</p>
+      
+          {/* Price */}
+          <label className="form-label">
+            Price <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("price")}
+            placeholder=".i.e. 100"
+            className={`form-input ${errors.price ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.price?.message}</p>
+      
+          {/* Discount */}
+          <label className="form-label">Discount (%)</label>
+          <input
+            {...register("discount")}
+            placeholder=".i.e. 10"
+            className={`form-input ${errors.discount ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.discount?.message}</p>
+      
+          {/* Currency */}
+          <label className="form-label">
+            Currency <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("currency")}
+            placeholder=".i.e. USD"
+            className={`form-input ${errors.currency ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.currency?.message}</p>
+      
+          {/* Stock Quantity */}
+          <label className="form-label">
+            Stock Quantity <span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("stockQuantity")}
+            placeholder=".i.e. 50"
+            className={`form-input ${errors.stockQuantity ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.stockQuantity?.message}</p>
+      
+          {/* Availability */}
+          <label className="form-label">
+            Availability <span className="text-red-500">*</span>
+          </label>
+          <select
+            {...register("availabilityStatus")}
+            className={`form-input ${errors.availabilityStatus ? 'border border-red-500' : ''}`}
+          >
+            <option className="text-black" value="In Stock">In Stock</option>
+            <option className="text-black" value="Out of Stock">Out of Stock</option>
+          </select>
+          <p className="error-text">{errors.availabilityStatus?.message}</p>
+      
+          {/* Current Image */}
+          {productToEdit?.productImage && (
+            <div className="mb-2">
+              <label className="form-label text-gray-500">Current Image</label>
+              <img
+                src={`${apiUrl}/${productToEdit.productImage}`}
+                alt="Current product"
+                className="w-32 h-32 object-cover border rounded mt-1"
+              />
+            </div>
+          )}
+      
+          {/* Product Image */}
+          <label className="form-label">
+            Product Image {!productToEdit && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            {...register("productImage")}
+            className={`form-input ${errors.productImage ? 'border border-red-500' : ''}`}
+          />
+          <p className="error-text">{errors.productImage?.message}</p>
+      
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded w-full sm:w-auto"
+          >
+            {productToEdit ? 'Update Product' : 'Add Product'}
+          </button>
         </form>
-
-    );
+      );
+      
 }
 
 export default ProductForm;
